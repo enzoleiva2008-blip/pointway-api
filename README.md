@@ -8,13 +8,14 @@ mesmas regras de negócio, agora expostas como endpoints HTTP para o front-end R
 **Equipe Pointway** — Kauã Fiuza (RM572369), Lucas Almeida (RM572499),
 Enzo Leiva (RM568877), Matheus Segura (RM570878) — turma 1TDSPO.
 
-- Deploy: `https://SEU-LINK-DO-DEPLOY` *(preencher após publicar)*
+- Deploy da API: https://pointway-api.onrender.com
+- Repositório: https://github.com/enzoleiva2008-blip/pointway-api
 - Front-end: `https://SEU-LINK-DA-VERCEL` *(preencher)*
 
 ## Tecnologias
 - Java 17 · Spring Boot 3.5 (spring-boot-starter-web)
 - JDBC puro com padrão **DAO + Connection Factory** (sem JPA, como em aula)
-- MySQL 8 (H2 opcional para testes locais)
+- MySQL 8 (na nuvem: Aiven; H2 opcional para testes locais)
 - Maven · Docker (para o deploy)
 
 ## Estrutura (camadas)
@@ -121,23 +122,24 @@ As tabelas são criadas sozinhas na primeira execução, junto com 4 operadoras 
 - **Eclipse:** File > Import > Maven > Existing Maven Projects.
 - **VS Code:** abra a pasta com o Extension Pack for Java instalado.
 
-## Deploy (Railway — API + MySQL no mesmo lugar)
-1. Suba este projeto para o GitHub.
-2. Em https://railway.com crie um projeto **Deploy from GitHub repo** e escolha o repositório
-   (o Railway detecta o `Dockerfile`).
-3. No mesmo projeto: **+ New > Database > MySQL**.
-4. No serviço da API, aba **Variables**, adicione:
-   ```
-   DB_URL=jdbc:mysql://${{MySQL.MYSQLHOST}}:${{MySQL.MYSQLPORT}}/${{MySQL.MYSQLDATABASE}}?useSSL=false&allowPublicKeyRetrieval=true
-   DB_USER=${{MySQL.MYSQLUSER}}
-   DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}
-   ```
-5. Aba **Settings > Networking > Generate Domain**. Esse link é a URL da API para o front.
-6. (Opcional) `CORS_ORIGIN=https://seu-front.vercel.app` para liberar só o seu front.
+## Deploy (Render + MySQL no Aiven)
+API publicada em **https://pointway-api.onrender.com** (teste: `https://pointway-api.onrender.com/operadoras`).
 
-**Alternativa Render:** New > Web Service > repositório > Runtime **Docker**, e as mesmas
-variáveis `DB_URL`, `DB_USER`, `DB_PASSWORD` apontando para um MySQL na nuvem
-(ex.: o MySQL do Railway pela URL pública, ou Aiven).
+1. **Banco:** em https://aiven.io crie um serviço **MySQL** no plano **Free**. Anote Host, Port, User e Password.
+2. **API:** em https://render.com > **New > Web Service** > repositório `pointway-api`.
+   O Render detecta o `Dockerfile`. Plano **Free**.
+3. Em **Environment Variables**:
+   ```
+   DB_URL=jdbc:mysql://HOST-DO-AIVEN:PORTA/defaultdb?sslMode=REQUIRED
+   DB_USER=avnadmin
+   DB_PASSWORD=<senha do Aiven>
+   ```
+4. **Deploy web service**. Ao subir, a API cria as tabelas e as operadoras iniciais.
+5. (Opcional) `CORS_ORIGIN=https://seu-front.vercel.app` para liberar só o seu front.
+
+> Plano gratuito: o Render "dorme" sem uso (o primeiro acesso leva ~50 s) e o Aiven pode
+> desligar o banco por inatividade — antes da apresentação, confira se está **Running**
+> no console do Aiven (botão **Power on** se necessário).
 
 ## Consumindo no front-end (React + TypeScript)
 ```ts
