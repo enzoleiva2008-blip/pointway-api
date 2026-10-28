@@ -71,8 +71,8 @@ pre{background:#0F1F18;color:#DFF0E6;border-radius:6px;padding:8px 10px;font-fam
    <div><div class="lbl">Solução</div><div class="val">Pointway<br>(módulo SoulTransporte)</div></div>
   </div>
   <div class="callout" style="margin-top:16px">
-   <b>Repositório GitHub:</b> <span class="mono">https://github.com/SEU-USUARIO/pointway-api</span><br>
-   <b>Deploy da API:</b> <span class="mono">https://SEU-LINK-DO-DEPLOY</span>
+   <b>Repositório GitHub:</b> <span class="mono">https://github.com/enzoleiva2008-blip/pointway-api</span><br>
+   <b>Deploy da API:</b> <span class="mono">https://pointway-api.onrender.com</span>
   </div>
  </div>
  <div class="foot"><span>Turma 1TDSPO · Análise e Desenvolvimento de Sistemas</span><span>Novembro / 2026</span></div>
@@ -125,7 +125,7 @@ pre{background:#0F1F18;color:#DFF0E6;border-radius:6px;padding:8px 10px;font-fam
 <!-- 03 -->
 <section class="sec">
  <div class="kicker">03 · API RESTful</div><h2>Tabela de endpoints</h2>
- <p>URL base: <code>https://SEU-LINK-DO-DEPLOY</code> (local: <code>http://localhost:8080</code>). Corpo e respostas em JSON.</p>
+ <p>URL base: <code>https://pointway-api.onrender.com</code> (local: <code>http://localhost:8080</code>). Corpo e respostas em JSON.</p>
  <table>
   <tr><th style="width:62px">Verbo</th><th>URI</th><th>Descrição</th><th style="width:52px">Sucesso</th><th style="width:88px">Erros</th></tr>
   <tr class="grp"><td colspan="5">Geral</td></tr>
@@ -381,17 +381,19 @@ pre{background:#0F1F18;color:#DFF0E6;border-radius:6px;padding:8px 10px;font-fam
 </section>
 <section class="sec">
  <div class="kicker">07 · Procedimentos (continuação)</div>
- <h3>Deploy na nuvem (Railway)</h3>
+ <h3>Deploy na nuvem (Render + Aiven)</h3>
+ <p>API publicada em <code>https://pointway-api.onrender.com</code> — teste rápido: <code>https://pointway-api.onrender.com/operadoras</code>.</p>
  <ol class="steps">
-  <li>Publicar o projeto no GitHub.</li>
-  <li>No Railway: <b>New Project &gt; Deploy from GitHub repo</b>. O <code>Dockerfile</code> do projeto é detectado e a API é compilada com Maven e executada com Java 17.</li>
-  <li>No mesmo projeto: <b>+ New &gt; Database &gt; MySQL</b>.</li>
-  <li>No serviço da API, aba <b>Variables</b>, criar <code>DB_URL</code>, <code>DB_USER</code> e <code>DB_PASSWORD</code> apontando para o MySQL do Railway (valores no README).</li>
-  <li><b>Settings &gt; Networking &gt; Generate Domain</b>: o link gerado é a URL da API usada pelo front-end na Vercel.</li>
+  <li><b>Banco de dados:</b> no Aiven, criar um serviço <b>MySQL</b> no plano <b>Free</b> e anotar Host, Port, User e Password.</li>
+  <li><b>API:</b> no Render, <b>New &gt; Web Service</b>, escolher o repositório <code>pointway-api</code>. O <code>Dockerfile</code> é detectado e a API é compilada com Maven e executada com Java 17 (plano Free).</li>
+  <li>Em <b>Environment Variables</b>, criar <code>DB_URL</code>, <code>DB_USER</code> e <code>DB_PASSWORD</code> com os dados do Aiven.</li>
+  <li>Clicar em <b>Deploy web service</b>. Ao iniciar, a API cria as tabelas e cadastra as operadoras iniciais.</li>
+  <li>A URL gerada pelo Render é a usada pelo front-end na Vercel (variável <code>VITE_API_URL</code>).</li>
  </ol>
- <pre>DB_URL=jdbc:mysql://${{MySQL.MYSQLHOST}}:${{MySQL.MYSQLPORT}}/${{MySQL.MYSQLDATABASE}}?useSSL=false&amp;allowPublicKeyRetrieval=true
-DB_USER=${{MySQL.MYSQLUSER}}
-DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}</pre>
+ <pre>DB_URL=jdbc:mysql://HOST-DO-AIVEN:PORTA/defaultdb?sslMode=REQUIRED
+DB_USER=avnadmin
+DB_PASSWORD=********</pre>
+ <div class="callout">Plano gratuito: o Render hiberna sem uso (primeiro acesso leva ~50 s) e o Aiven pode desligar o banco por inatividade — antes da avaliação, confirmar que o serviço MySQL está <b>Running</b>.</div>
  <h3>Integração com o front-end</h3>
  <p>O <code>CorsFilter</code> libera chamadas vindas de outro domínio (a Vercel) e responde às requisições <i>preflight</i> (<code>OPTIONS</code>). No React, a URL da API fica na variável <code>VITE_API_URL</code>:</p>
  <pre>const resp = await fetch(`${import.meta.env.VITE_API_URL}/vouchers`, {
