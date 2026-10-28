@@ -1,0 +1,38 @@
+### Testes rapidos da API (IntelliJ HTTP Client ou extensao REST Client do VS Code)
+@base = http://localhost:8080
+
+### Status da API
+GET {{base}}/
+
+### Operadoras
+GET {{base}}/operadoras
+
+### Cadastrar usuario
+POST {{base}}/usuarios
+Content-Type: application/json
+
+{ "nome": "Enzo Leiva", "cpf": "529.982.247-25", "email": "enzo@email.com", "saldoPontos": 2000 }
+
+### Creditar pontos SoulUp
+PATCH {{base}}/usuarios/1/pontos
+Content-Type: application/json
+
+{ "pontos": 500 }
+
+### Converter pontos em voucher
+POST {{base}}/vouchers
+Content-Type: application/json
+
+{ "usuarioId": 1, "operadoraId": 1, "pontos": 800 }
+
+### Usar o voucher na catraca (troque o codigo pelo que voltou acima)
+POST {{base}}/viagens
+Content-Type: application/json
+
+{ "codigoVoucher": "COLE-O-CODIGO-AQUI", "modal": "ONIBUS", "distanciaKm": 12.5 }
+
+### Painel do usuario
+GET {{base}}/usuarios/1/resumo
+
+### Impacto geral
+GET {{base}}/impacto

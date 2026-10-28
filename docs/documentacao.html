@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Pointway API - Sprint 4</title>
+<style>
+@page{size:A4;margin:18mm 16mm 18mm 16mm}
+:root{--ink:#122019;--muted:#5B6B62;--border:#D8E2DA;--accent:#1F7A5C;--accent-ink:#0F3D2C;--soft:#DFF0E6;--s2:#EBF1EC;--blue:#2B6CB0;--bsoft:#E1EBF6;--warn:#B45309;--wsoft:#FBEBD8}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:"DejaVu Sans",Arial,sans-serif;font-size:10.5pt;line-height:1.5}
+h1,h2,h3{font-family:"DejaVu Serif",Georgia,serif;margin:0 0 .4em}
+.sec{page-break-before:always}
+.kicker{font-family:"DejaVu Sans Mono",monospace;font-size:8.5pt;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+h2{font-size:20pt;margin-bottom:12px}
+h3{font-size:12pt;margin:14px 0 6px}
+p{margin:0 0 8px}
+code,.mono{font-family:"DejaVu Sans Mono",monospace;font-size:8.6pt}
+.callout{background:var(--s2);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:6px;padding:9px 12px;margin:10px 0;font-size:9.6pt}
+.warn{border-left-color:var(--warn);background:var(--wsoft)}
+/* capa */
+.cover{height:255mm;display:flex;flex-direction:column;justify-content:space-between}
+.eyebrow{font-family:"DejaVu Sans Mono",monospace;font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);background:var(--soft);border:1px solid var(--accent);display:inline-block;padding:4px 10px;border-radius:99px}
+.cover h1{font-size:54pt;line-height:1;margin:22px 0 8px}
+.tag{font-size:13pt;color:var(--muted);max-width:140mm}
+.route{height:3px;margin:20px 0;background:repeating-linear-gradient(90deg,var(--accent) 0 12px,transparent 12px 20px)}
+.grid3{display:grid;grid-template-columns:1fr 1.3fr 1fr;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.grid3>div{padding:14px 16px;border-right:1px solid var(--border)}
+.grid3>div:last-child{border-right:0}
+.lbl{font-family:"DejaVu Sans Mono",monospace;font-size:7.5pt;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.val{font-weight:bold;font-size:10.5pt}
+.foot{display:flex;justify-content:space-between;font-family:"DejaVu Sans Mono",monospace;font-size:8.5pt;color:var(--muted)}
+/* toc */
+.toc{list-style:none;margin:10px 0 0;padding:0}
+.toc li{display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--border);padding:10px 2px}
+.toc .n{font-family:"DejaVu Sans Mono",monospace;color:var(--accent);width:22px}
+.toc .t{font-weight:bold}
+.toc .d{color:var(--muted);font-size:9pt;margin-left:auto}
+.toc .p{font-family:"DejaVu Sans Mono",monospace;color:var(--accent);width:52px;text-align:right;white-space:nowrap}
+/* features */
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.feat div{border:1px solid var(--border);border-radius:8px;padding:9px 11px}
+.feat b{display:block;margin-bottom:3px;color:var(--accent-ink)}
+.feat span{font-size:9.2pt;color:var(--muted)}
+/* tabelas */
+table{border-collapse:collapse;width:100%;font-size:8.8pt}
+th{background:var(--accent);color:#fff;text-align:left;padding:5px 7px;font-weight:bold}
+td{border-bottom:1px solid var(--border);padding:4.5px 7px;vertical-align:top}
+tr.grp td{background:var(--s2);font-weight:bold;color:var(--accent-ink);font-family:"DejaVu Serif",serif}
+.v{font-family:"DejaVu Sans Mono",monospace;font-weight:bold;font-size:8pt;padding:1px 5px;border-radius:4px;color:#fff;display:inline-block;min-width:44px;text-align:center}
+.GET{background:#2B6CB0}.POST{background:#1F7A5C}.PUT{background:#B45309}.PATCH{background:#7C3AED}.DELETE{background:#B42318}
+/* prototipo */
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.shot{border:2px dashed var(--warn);border-radius:10px;height:62mm;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--warn);font-size:9pt;padding:10px;background:#FFFBF5}
+.cap{font-size:9pt;color:var(--muted);margin-top:4px}
+/* uml */
+svg text{font-family:"DejaVu Sans",Arial,sans-serif}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;position:relative;padding:0 0 9px 30px}
+.steps li:before{content:counter(s);position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:8.5pt;font-weight:bold;display:flex;align-items:center;justify-content:center}
+pre{background:#0F1F18;color:#DFF0E6;border-radius:6px;padding:8px 10px;font-family:"DejaVu Sans Mono",monospace;font-size:8pt;white-space:pre-wrap;margin:6px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+</style></head><body>
+
+<!-- CAPA -->
+<section class="cover">
+ <div>
+  <span class="eyebrow">FIAP · Domain Driven Design Using Java · Sprint 4</span>
+  <h1>Pointway API</h1>
+  <p class="tag">API RESTful em Spring Boot que converte pontos digitais da plataforma SoulUp em créditos reais de transporte público — documentação final do projeto Java (Desafio 2: Utilização de Pontos para Transporte Público).</p>
+  <div class="route"></div>
+  <div class="grid3">
+   <div><div class="lbl">Nome da equipe</div><div class="val">Equipe Pointway</div></div>
+   <div><div class="lbl">Integrantes</div><div class="val">Kauã Fiuza — RM572369<br>Lucas Almeida — RM572499<br>Enzo Leiva — RM568877<br>Matheus Segura — RM570878</div></div>
+   <div><div class="lbl">Solução</div><div class="val">Pointway<br>(módulo SoulTransporte)</div></div>
+  </div>
+  <div class="callout" style="margin-top:16px">
+   <b>Repositório GitHub:</b> <span class="mono">https://github.com/SEU-USUARIO/pointway-api</span><br>
+   <b>Deploy da API:</b> <span class="mono">https://SEU-LINK-DO-DEPLOY</span>
+  </div>
+ </div>
+ <div class="foot"><span>Turma 1TDSPO · Análise e Desenvolvimento de Sistemas</span><span>Novembro / 2026</span></div>
+</section>
+
+<!-- SUMARIO -->
+<section class="sec">
+ <div class="kicker">Sumário</div><h2>Índice do documento</h2>
+ <ul class="toc">
+  <li><span class="n">01</span><span class="t">Objetivo e escopo do projeto</span><span class="d">Problema, propósito e limites</span><span class="p">p. 3</span></li>
+  <li><span class="n">02</span><span class="t">Funcionalidades implementadas</span><span class="d">O que a API entrega ao front-end</span><span class="p">p. 4</span></li>
+  <li><span class="n">03</span><span class="t">Tabela de endpoints</span><span class="d">URIs, verbos HTTP e códigos de status</span><span class="p">p. 5</span></li>
+  <li><span class="n">04</span><span class="t">Protótipo — telas implementadas</span><span class="d">Prints do front-end consumindo a API</span><span class="p">p. 7</span></li>
+  <li><span class="n">05</span><span class="t">Modelo de Entidade-Relacionamento</span><span class="d">Tabelas, chaves e relacionamentos</span><span class="p">p. 8</span></li>
+  <li><span class="n">06</span><span class="t">Diagrama de classes</span><span class="d">Camadas model, DAO, BO e resource</span><span class="p">p. 9</span></li>
+  <li><span class="n">07</span><span class="t">Procedimentos para rodar a aplicação</span><span class="d">Ferramentas, versões, execução e deploy</span><span class="p">p. 10</span></li>
+ </ul>
+</section>
+
+<!-- 01 -->
+<section class="sec">
+ <div class="kicker">01 · Objetivo e escopo</div><h2>Transformar engajamento digital em mobilidade real</h2>
+ <p>A SoulUp identificou que grande parte dos pontos acumulados por seus usuários expira sem uso, enquanto o transporte público é uma necessidade diária — principalmente para a população de baixa renda. O <b>Pointway</b> resolve essa desconexão: o usuário converte pontos digitais em créditos de transporte, usados por meio de um voucher digital em ônibus, metrô, trem e BRT de operadoras parceiras.</p>
+ <p>O propósito do sistema é dar um destino concreto e cotidiano aos pontos SoulUp, gerando impacto ambiental mensurável (CO<sub>2</sub> evitado) e inclusão social, ao reduzir o custo de transporte para quem mais depende dele.</p>
+ <h3>O que mudou da Sprint 3 para a Sprint 4</h3>
+ <p>Na Sprint 3 o projeto era uma aplicação Java com camada de modelo, DAO e uma classe de teste. Nesta entrega final ele virou uma <b>API RESTful em Spring Boot</b>, publicada na nuvem e consumida pelo front-end em React + Vite + TypeScript. As entidades, o banco e as regras de negócio foram mantidos; foram adicionadas a camada <b>BO</b> (validações e regras), a camada <b>Resource</b> (endpoints), o <b>CorsFilter</b>, o tratamento padronizado de erros e o deploy.</p>
+ <div class="callout"><b>Escopo desta entrega:</b> cadastro e gestão de usuários e operadoras; crédito de pontos; conversão de pontos em vouchers com regra antifraude; validação do voucher na catraca com registro da viagem e cálculo de CO<sub>2</sub>; painel do usuário e indicadores gerais de impacto; persistência em MySQL com CRUD completo das quatro tabelas.</div>
+ <div class="callout warn"><b>Fora do escopo:</b> integração real com os sistemas de bilhetagem das operadoras (SPTrans, Metrô, RioCard), autenticação de usuários e o aplicativo mobile. A validação na catraca é simulada pelo endpoint <code>POST /viagens</code>.</div>
+</section>
+
+<!-- 02 -->
+<section class="sec">
+ <div class="kicker">02 · Funcionalidades</div><h2>O que a API entrega ao front-end</h2>
+ <div class="feat">
+  <div><b>Cadastro de usuários</b><span>CRUD completo, CPF validado pelos dígitos verificadores e único no sistema, e-mail validado.</span></div>
+  <div><b>Crédito de pontos SoulUp</b><span>Endpoint para somar pontos ganhos na plataforma ao saldo do usuário, com limite por operação.</span></div>
+  <div><b>Operadoras parceiras</b><span>CRUD com filtro por cidade; 4 operadoras já são cadastradas na primeira execução.</span></div>
+  <div><b>Conversão de pontos em voucher</b><span>100 pontos = R$ 1,00, mínimo de 500 pontos, saldo verificado e debitado na emissão.</span></div>
+  <div><b>Prevenção de fraude</b><span>No máximo 3 vouchers emitidos por usuário em 24 horas.</span></div>
+  <div><b>Voucher digital</b><span>Código único (UUID), validade de 30 dias, prorrogável até 90; vencidos viram EXPIRADO automaticamente.</span></div>
+  <div><b>Validação na catraca</b><span>Uso único: registra a viagem, marca o voucher como UTILIZADO e recusa voucher vencido ou já usado.</span></div>
+  <div><b>Cálculo de CO<sub>2</sub> economizado</b><span>Distância × fator do modal (ônibus 0,09 · metrô 0,04 · trem 0,05 · BRT 0,07 kg/km).</span></div>
+  <div><b>Cancelamento com estorno</b><span>Voucher ainda não usado pode ser cancelado e os pontos voltam ao saldo.</span></div>
+  <div><b>Painel e impacto</b><span>Resumo por usuário (saldo, vouchers, viagens, CO<sub>2</sub>) e indicadores gerais para a página inicial.</span></div>
+  <div><b>Erros padronizados</b><span>Toda falha volta em JSON com status HTTP e mensagem pronta para exibir na tela.</span></div>
+  <div><b>Integridade dos dados</b><span>Usuário ou operadora com vouchers vinculados não pode ser excluído.</span></div>
+ </div>
+</section>
+
+<!-- 03 -->
+<section class="sec">
+ <div class="kicker">03 · API RESTful</div><h2>Tabela de endpoints</h2>
+ <p>URL base: <code>https://SEU-LINK-DO-DEPLOY</code> (local: <code>http://localhost:8080</code>). Corpo e respostas em JSON.</p>
+ <table>
+  <tr><th style="width:62px">Verbo</th><th>URI</th><th>Descrição</th><th style="width:52px">Sucesso</th><th style="width:88px">Erros</th></tr>
+  <tr class="grp"><td colspan="5">Geral</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/</td><td>Status da API (health check)</td><td>200</td><td>—</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/impacto</td><td>Indicadores gerais da plataforma</td><td>200</td><td>500</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/modais</td><td>Modais aceitos e fator de CO<sub>2</sub></td><td>200</td><td>—</td></tr>
+  <tr class="grp"><td colspan="5">Usuários</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/usuarios</td><td>Lista todos os usuários</td><td>200</td><td>500</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/usuarios/{id}</td><td>Busca usuário pelo id</td><td>200</td><td>404</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/usuarios/cpf/{cpf}</td><td>Busca usuário pelo CPF</td><td>200</td><td>400, 404</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/usuarios/{id}/resumo</td><td>Painel: saldo, vouchers, viagens e CO<sub>2</sub></td><td>200</td><td>404</td></tr>
+  <tr><td><span class="v POST">POST</span></td><td class="mono">/usuarios</td><td>Cadastra usuário</td><td>201</td><td>400, 409</td></tr>
+  <tr><td><span class="v PUT">PUT</span></td><td class="mono">/usuarios/{id}</td><td>Atualiza usuário</td><td>200</td><td>400, 404, 409</td></tr>
+  <tr><td><span class="v PATCH">PATCH</span></td><td class="mono">/usuarios/{id}/pontos</td><td>Credita pontos SoulUp</td><td>200</td><td>400, 404, 422</td></tr>
+  <tr><td><span class="v DELETE">DELETE</span></td><td class="mono">/usuarios/{id}</td><td>Remove usuário sem vouchers</td><td>204</td><td>404, 409</td></tr>
+  <tr class="grp"><td colspan="5">Operadoras</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/operadoras?cidade=</td><td>Lista operadoras (filtro opcional)</td><td>200</td><td>500</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/operadoras/{id}</td><td>Busca operadora</td><td>200</td><td>404</td></tr>
+  <tr><td><span class="v POST">POST</span></td><td class="mono">/operadoras</td><td>Cadastra operadora</td><td>201</td><td>400</td></tr>
+  <tr><td><span class="v PUT">PUT</span></td><td class="mono">/operadoras/{id}</td><td>Atualiza operadora</td><td>200</td><td>400, 404</td></tr>
+  <tr><td><span class="v DELETE">DELETE</span></td><td class="mono">/operadoras/{id}</td><td>Remove operadora sem vouchers</td><td>204</td><td>404, 409</td></tr>
+ </table>
+</section>
+<section class="sec">
+ <table>
+  <tr><th style="width:62px">Verbo</th><th>URI</th><th>Descrição</th><th style="width:52px">Sucesso</th><th style="width:88px">Erros</th></tr>
+  <tr class="grp"><td colspan="5">Vouchers</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/vouchers?usuarioId=&amp;status=</td><td>Lista vouchers (filtros opcionais)</td><td>200</td><td>400, 404</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/vouchers/{id}</td><td>Busca voucher pelo id</td><td>200</td><td>404</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/vouchers/codigo/{codigo}</td><td>Busca voucher pelo código</td><td>200</td><td>404</td></tr>
+  <tr><td><span class="v POST">POST</span></td><td class="mono">/vouchers</td><td>Converte pontos em voucher</td><td>201</td><td>400, 404, 422</td></tr>
+  <tr><td><span class="v PUT">PUT</span></td><td class="mono">/vouchers/{id}</td><td>Altera validade e/ou status</td><td>200</td><td>400, 404, 422</td></tr>
+  <tr><td><span class="v DELETE">DELETE</span></td><td class="mono">/vouchers/{id}</td><td>Cancela e devolve os pontos</td><td>204</td><td>404, 422</td></tr>
+  <tr class="grp"><td colspan="5">Viagens</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/viagens?usuarioId=</td><td>Lista viagens (filtro opcional)</td><td>200</td><td>404</td></tr>
+  <tr><td><span class="v GET">GET</span></td><td class="mono">/viagens/{id}</td><td>Busca viagem</td><td>200</td><td>404</td></tr>
+  <tr><td><span class="v POST">POST</span></td><td class="mono">/viagens</td><td>Usa o voucher na catraca e registra a viagem</td><td>201</td><td>400, 404, 422</td></tr>
+  <tr><td><span class="v PUT">PUT</span></td><td class="mono">/viagens/{id}</td><td>Corrige modal/distância (recalcula CO<sub>2</sub>)</td><td>200</td><td>400, 404</td></tr>
+  <tr><td><span class="v DELETE">DELETE</span></td><td class="mono">/viagens/{id}</td><td>Remove viagem</td><td>204</td><td>404</td></tr>
+ </table>
+ <h3>Significado dos códigos de status</h3>
+ <table>
+  <tr><th style="width:60px">Código</th><th>Quando acontece</th></tr>
+  <tr><td><b>200</b></td><td>Consulta ou atualização feita com sucesso.</td></tr>
+  <tr><td><b>201</b></td><td>Registro criado; o header <code>Location</code> traz a URI do novo recurso.</td></tr>
+  <tr><td><b>204</b></td><td>Registro removido (sem corpo na resposta).</td></tr>
+  <tr><td><b>400</b></td><td>Dados inválidos: CPF/e-mail errado, campo obrigatório vazio, JSON mal formado, modal inexistente.</td></tr>
+  <tr><td><b>404</b></td><td>Usuário, operadora, voucher, viagem ou endpoint não encontrado.</td></tr>
+  <tr><td><b>409</b></td><td>Conflito: CPF já cadastrado ou registro com vouchers vinculados.</td></tr>
+  <tr><td><b>422</b></td><td>Regra de negócio: saldo insuficiente, limite de 3 resgates em 24 h, voucher já usado ou vencido.</td></tr>
+  <tr><td><b>500</b></td><td>Erro interno ou falha de conexão com o banco de dados.</td></tr>
+ </table>
+ <h3>Exemplo — converter pontos em voucher</h3>
+ <div class="two">
+  <pre>POST /vouchers
+{
+  "usuarioId": 1,
+  "operadoraId": 1,
+  "pontos": 800
+}</pre>
+  <pre>422 Unprocessable Entity
+{
+  "status": 422,
+  "erro": "Unprocessable Entity",
+  "mensagem": "Saldo insuficiente. Saldo atual: 300 pontos.",
+  "caminho": "/vouchers"
+}</pre>
+ </div>
+</section>
+
+<!-- 04 -->
+<section class="sec">
+ <div class="kicker">04 · Protótipo</div><h2>Telas implementadas</h2>
+ <p>Capturas reais do front-end (React + Vite + TypeScript, publicado na Vercel) consumindo esta API.</p>
+ <div class="shots">
+  <div><div class="shot">[ Inserir print da tela inicial<br>— consome GET /impacto ]</div><p class="cap">1. Início — mostra os indicadores gerais (vouchers emitidos, viagens e CO<sub>2</sub> evitado) vindos de <code>GET /impacto</code>.</p></div>
+  <div><div class="shot">[ Inserir print do cadastro / perfil<br>— POST /usuarios e GET /usuarios/{id}/resumo ]</div><p class="cap">2. Cadastro e painel — o usuário se cadastra e vê saldo, vouchers e impacto acumulado.</p></div>
+  <div><div class="shot">[ Inserir print da conversão<br>— GET /operadoras e POST /vouchers ]</div><p class="cap">3. Conversão — escolhe a operadora e a quantidade de pontos; a API devolve o voucher ou a mensagem de erro.</p></div>
+  <div><div class="shot">[ Inserir print da validação<br>— POST /viagens ]</div><p class="cap">4. Validação na catraca — informa modal e distância; a viagem é registrada com o CO<sub>2</sub> economizado.</p></div>
+ </div>
+ <div class="callout warn" style="margin-top:10px">Substituir os quadros acima pelos prints reais das telas do front-end antes da entrega.</div>
+</section>
+
+<!-- 05 MER -->
+<section class="sec">
+ <div class="kicker">05 · Modelo de Entidade-Relacionamento</div><h2>Estrutura do banco de dados</h2>
+ <p>O banco é o mesmo da Sprint 3 (MySQL). As tabelas são criadas automaticamente pela API ao iniciar, a partir de <code>schema.sql</code>.</p>
+ <svg viewBox="0 0 700 430" width="100%">
+  <defs><marker id="crow" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto"><path d="M0 0 L11 6 L0 12 M11 0 L11 12" fill="none" stroke="#1F7A5C" stroke-width="1.4"/></marker></defs>
+  <g font-size="11">
+  <!-- usuarios -->
+  <rect x="10" y="10" width="230" height="140" rx="6" fill="#fff" stroke="#1F7A5C"/><rect x="10" y="10" width="230" height="24" rx="6" fill="#1F7A5C"/>
+  <text x="22" y="27" fill="#fff" font-weight="bold">USUARIOS</text>
+  <text x="22" y="52">id</text><text x="120" y="52" fill="#5B6B62">INT</text><text x="200" y="52" fill="#1F7A5C" font-weight="bold">PK</text>
+  <text x="22" y="70">nome</text><text x="120" y="70" fill="#5B6B62">VARCHAR(120)</text>
+  <text x="22" y="88">cpf</text><text x="120" y="88" fill="#5B6B62">VARCHAR(14)</text><text x="200" y="88" fill="#2B6CB0" font-weight="bold">UK</text>
+  <text x="22" y="106">email</text><text x="120" y="106" fill="#5B6B62">VARCHAR(120)</text>
+  <text x="22" y="124">saldo_pontos</text><text x="120" y="124" fill="#5B6B62">INT</text>
+  <text x="22" y="142">data_cadastro</text><text x="120" y="142" fill="#5B6B62">DATE</text>
+  <!-- operadoras -->
+  <rect x="460" y="10" width="230" height="104" rx="6" fill="#fff" stroke="#1F7A5C"/><rect x="460" y="10" width="230" height="24" rx="6" fill="#1F7A5C"/>
+  <text x="472" y="27" fill="#fff" font-weight="bold">OPERADORAS</text>
+  <text x="472" y="52">id</text><text x="590" y="52" fill="#5B6B62">INT</text><text x="660" y="52" fill="#1F7A5C" font-weight="bold">PK</text>
+  <text x="472" y="70">nome</text><text x="590" y="70" fill="#5B6B62">VARCHAR(120)</text>
+  <text x="472" y="88">cidade</text><text x="590" y="88" fill="#5B6B62">VARCHAR(80)</text>
+  <text x="472" y="106">sistema_bilhetagem</text><text x="590" y="106" fill="#5B6B62">VARCHAR(80)</text>
+  <!-- vouchers -->
+  <rect x="235" y="190" width="230" height="194" rx="6" fill="#fff" stroke="#1F7A5C"/><rect x="235" y="190" width="230" height="24" rx="6" fill="#1F7A5C"/>
+  <text x="247" y="207" fill="#fff" font-weight="bold">VOUCHERS</text>
+  <text x="247" y="232">id</text><text x="365" y="232" fill="#5B6B62">INT</text><text x="440" y="232" fill="#1F7A5C" font-weight="bold">PK</text>
+  <text x="247" y="250">codigo</text><text x="365" y="250" fill="#5B6B62">VARCHAR(36)</text><text x="440" y="250" fill="#2B6CB0" font-weight="bold">UK</text>
+  <text x="247" y="268">usuario_id</text><text x="365" y="268" fill="#5B6B62">INT</text><text x="440" y="268" fill="#B45309" font-weight="bold">FK</text>
+  <text x="247" y="286">operadora_id</text><text x="365" y="286" fill="#5B6B62">INT</text><text x="440" y="286" fill="#B45309" font-weight="bold">FK</text>
+  <text x="247" y="304">valor_credito</text><text x="365" y="304" fill="#5B6B62">DECIMAL(10,2)</text>
+  <text x="247" y="322">pontos_utilizados</text><text x="365" y="322" fill="#5B6B62">INT</text>
+  <text x="247" y="340">data_emissao</text><text x="365" y="340" fill="#5B6B62">DATE</text>
+  <text x="247" y="358">data_validade</text><text x="365" y="358" fill="#5B6B62">DATE</text>
+  <text x="247" y="376">status</text><text x="365" y="376" fill="#5B6B62">VARCHAR(20)</text>
+  <!-- viagens -->
+  <rect x="10" y="260" width="200" height="140" rx="6" fill="#fff" stroke="#1F7A5C"/><rect x="10" y="260" width="200" height="24" rx="6" fill="#1F7A5C"/>
+  <text x="22" y="277" fill="#fff" font-weight="bold">VIAGENS</text>
+  <text x="22" y="302">id</text><text x="110" y="302" fill="#5B6B62">INT</text><text x="180" y="302" fill="#1F7A5C" font-weight="bold">PK</text>
+  <text x="22" y="320">voucher_id</text><text x="110" y="320" fill="#5B6B62">INT</text><text x="180" y="320" fill="#B45309" font-weight="bold">FK</text>
+  <text x="22" y="338">modal</text><text x="110" y="338" fill="#5B6B62">VARCHAR(20)</text>
+  <text x="22" y="356">distancia_km</text><text x="110" y="356" fill="#5B6B62">DECIMAL(6,2)</text>
+  <text x="22" y="374">co2_econ._kg</text><text x="110" y="374" fill="#5B6B62">DECIMAL(6,2)</text>
+  <text x="22" y="392">data_uso</text><text x="110" y="392" fill="#5B6B62">DATETIME</text>
+  </g>
+  <g stroke="#1F7A5C" stroke-width="1.4" fill="none">
+   <path d="M125 150 V170 H300 V188" marker-end="url(#crow)"/>
+   <path d="M575 114 V170 H400 V188" marker-end="url(#crow)"/>
+   <path d="M235 330 H212" marker-end="url(#crow)"/>
+  </g>
+  <g font-size="10" fill="#0F3D2C" font-style="italic">
+   <text x="140" y="165">1 : N  converte</text><text x="470" y="165">1 : N  emite</text><text x="213" y="323" font-size="9">1:N</text>
+  </g>
+ </svg>
+ <table style="margin-top:6px">
+  <tr><th>Relacionamento</th><th>Cardinalidade</th><th>Regra</th></tr>
+  <tr><td>USUARIOS → VOUCHERS</td><td>1 : N</td><td>Um usuário converte pontos em vários vouchers (fk_voucher_usuario).</td></tr>
+  <tr><td>OPERADORAS → VOUCHERS</td><td>1 : N</td><td>Cada voucher vale em uma operadora (fk_voucher_operadora).</td></tr>
+  <tr><td>VOUCHERS → VIAGENS</td><td>1 : N (na prática 1 : 1)</td><td>O voucher é de uso único; a regra de negócio garante uma viagem por voucher (fk_viagem_voucher).</td></tr>
+ </table>
+</section>
+
+<!-- 06 CLASSES -->
+<section class="sec">
+ <div class="kicker">06 · Diagrama de classes</div><h2>Camadas da aplicação</h2>
+ <p style="font-size:9.4pt">Fluxo de uma requisição: <b>Resource</b> (recebe o HTTP) → <b>BO</b> (valida e aplica regras) → <b>DAO</b> (SQL via <b>ConnectionFactory</b>) → MySQL. O <b>model</b> carrega as regras de domínio.</p>
+ <svg viewBox="0 0 720 560" width="100%" font-size="8.6">
+  <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10" fill="none" stroke="#5B6B62" stroke-width="1.3"/></marker>
+  <marker id="dia" viewBox="0 0 14 10" refX="13" refY="5" markerWidth="12" markerHeight="9" orient="auto"><path d="M0 5 L7 0 L14 5 L7 10 Z" fill="#fff" stroke="#1F7A5C" stroke-width="1.2"/></marker></defs>
+  <!-- labels de camada -->
+  <g font-family="DejaVu Sans Mono" font-size="8" fill="#1F7A5C" letter-spacing="1"><text x="4" y="12">RESOURCE</text><text x="4" y="122">BO</text><text x="4" y="232">DAO</text><text x="4" y="364">MODEL</text></g>
+  <!-- resources -->
+  <g>
+   <rect x="4" y="18" width="170" height="86" fill="#E1EBF6" stroke="#2B6CB0"/><text x="12" y="31" font-weight="bold">UsuarioResource</text><line x1="4" y1="36" x2="174" y2="36" stroke="#2B6CB0"/>
+   <text x="12" y="48">+ listar(), buscar(id)</text><text x="12" y="60">+ buscarPorCpf(cpf), resumo(id)</text><text x="12" y="72">+ cadastrar(dto), atualizar(id,dto)</text><text x="12" y="84">+ adicionarPontos(id,dto)</text><text x="12" y="96">+ excluir(id)</text>
+   <rect x="182" y="18" width="170" height="86" fill="#E1EBF6" stroke="#2B6CB0"/><text x="190" y="31" font-weight="bold">OperadoraResource</text><line x1="182" y1="36" x2="352" y2="36" stroke="#2B6CB0"/>
+   <text x="190" y="48">+ listar(cidade), buscar(id)</text><text x="190" y="60">+ cadastrar(dto)</text><text x="190" y="72">+ atualizar(id,dto)</text><text x="190" y="84">+ excluir(id)</text>
+   <rect x="360" y="18" width="170" height="86" fill="#E1EBF6" stroke="#2B6CB0"/><text x="368" y="31" font-weight="bold">VoucherResource</text><line x1="360" y1="36" x2="530" y2="36" stroke="#2B6CB0"/>
+   <text x="368" y="48">+ listar(usuarioId,status)</text><text x="368" y="60">+ buscar(id), buscarPorCodigo(c)</text><text x="368" y="72">+ emitir(dto)</text><text x="368" y="84">+ atualizar(id,dto)</text><text x="368" y="96">+ cancelar(id)</text>
+   <rect x="538" y="18" width="178" height="86" fill="#E1EBF6" stroke="#2B6CB0"/><text x="546" y="31" font-weight="bold">ViagemResource · HomeResource</text><line x1="538" y1="36" x2="716" y2="36" stroke="#2B6CB0"/>
+   <text x="546" y="48">+ listar(usuarioId), buscar(id)</text><text x="546" y="60">+ registrar(dto)</text><text x="546" y="72">+ atualizar(id,dto), excluir(id)</text><text x="546" y="84">+ status(), impacto(), modais()</text>
+  </g>
+  <!-- BOs -->
+  <g>
+   <rect x="4" y="128" width="170" height="86" fill="#DFF0E6" stroke="#1F7A5C"/><text x="12" y="141" font-weight="bold">UsuarioBO</text><line x1="4" y1="146" x2="174" y2="146" stroke="#1F7A5C"/>
+   <text x="12" y="158">+ cadastrar / atualizar / excluir</text><text x="12" y="170">+ adicionarPontos(id, pontos)</text><text x="12" y="182">+ resumo(id)</text><text x="12" y="194">- validar(dto)</text><text x="12" y="206">~ formatarCpf(cpf)</text>
+   <rect x="182" y="128" width="170" height="86" fill="#DFF0E6" stroke="#1F7A5C"/><text x="190" y="141" font-weight="bold">OperadoraBO</text><line x1="182" y1="146" x2="352" y2="146" stroke="#1F7A5C"/>
+   <text x="190" y="158">+ listar(cidade)</text><text x="190" y="170">+ cadastrar / atualizar</text><text x="190" y="182">+ excluir(id)</text><text x="190" y="194">- validar(dto)</text>
+   <rect x="360" y="128" width="170" height="86" fill="#DFF0E6" stroke="#1F7A5C"/><text x="368" y="141" font-weight="bold">VoucherBO</text><line x1="360" y1="146" x2="530" y2="146" stroke="#1F7A5C"/>
+   <text x="368" y="158">+ listar(usuarioId, status)</text><text x="368" y="170">+ emitir(dto)  [antifraude]</text><text x="368" y="182">+ atualizar(id, dto)</text><text x="368" y="194">+ cancelar(id)  [estorno]</text><text x="368" y="206">+ buscarPorCodigo(codigo)</text>
+   <rect x="538" y="128" width="178" height="86" fill="#DFF0E6" stroke="#1F7A5C"/><text x="546" y="141" font-weight="bold">ViagemBO</text><line x1="538" y1="146" x2="716" y2="146" stroke="#1F7A5C"/>
+   <text x="546" y="158">+ registrar(dto)  [catraca]</text><text x="546" y="170">+ atualizar(id, dto)</text><text x="546" y="182">+ excluir(id), listar(usuarioId)</text><text x="546" y="194">+ impactoGeral()</text><text x="546" y="206">- validarDistancia(km)</text>
+  </g>
+  <!-- DAOs -->
+  <g>
+   <rect x="4" y="238" width="134" height="100" fill="#fff" stroke="#5B6B62"/><text x="12" y="251" font-weight="bold">UsuarioDAO</text><line x1="4" y1="256" x2="138" y2="256" stroke="#5B6B62"/>
+   <text x="12" y="268">+ inserir(u)</text><text x="12" y="280">+ buscarPorId / PorCpf</text><text x="12" y="292">+ listarTodos()</text><text x="12" y="304">+ atualizar(u)</text><text x="12" y="316">+ deletar(id)</text>
+   <rect x="146" y="238" width="134" height="100" fill="#fff" stroke="#5B6B62"/><text x="154" y="251" font-weight="bold">OperadoraDAO</text><line x1="146" y1="256" x2="280" y2="256" stroke="#5B6B62"/>
+   <text x="154" y="268">+ inserir(o)</text><text x="154" y="280">+ buscarPorId(id)</text><text x="154" y="292">+ listarTodos / PorCidade</text><text x="154" y="304">+ atualizar(o), contar()</text><text x="154" y="316">+ deletar(id)</text>
+   <rect x="288" y="238" width="148" height="100" fill="#fff" stroke="#5B6B62"/><text x="296" y="251" font-weight="bold">VoucherDAO</text><line x1="288" y1="256" x2="436" y2="256" stroke="#5B6B62"/>
+   <text x="296" y="268">+ inserir(v), atualizar(v)</text><text x="296" y="280">+ buscarPorId / PorCodigo</text><text x="296" y="292">+ listarPorUsuario/Status</text><text x="296" y="304">+ contarEmitidosDesde(...)</text><text x="296" y="316">+ expirarVencidos()</text><text x="296" y="328">+ atualizarStatus, deletar</text>
+   <rect x="444" y="238" width="140" height="100" fill="#fff" stroke="#5B6B62"/><text x="452" y="251" font-weight="bold">ViagemDAO</text><line x1="444" y1="256" x2="584" y2="256" stroke="#5B6B62"/>
+   <text x="452" y="268">+ inserir(v)</text><text x="452" y="280">+ buscarPorId(id)</text><text x="452" y="292">+ listarTodas/PorUsuario</text><text x="452" y="304">+ somarCo2(usuarioId)</text><text x="452" y="316">+ atualizar(v), deletar</text>
+   <rect x="592" y="238" width="124" height="60" fill="#FBEBD8" stroke="#B45309"/><text x="600" y="251" font-weight="bold">ConnectionFactory</text><line x1="592" y1="256" x2="716" y2="256" stroke="#B45309"/>
+   <text x="600" y="268">- URL, USUARIO, SENHA</text><text x="600" y="282">+ getConnection()</text>
+   <rect x="592" y="306" width="124" height="32" fill="#FBEBD8" stroke="#B45309"/><text x="600" y="320" font-weight="bold">CorsFilter</text><text x="600" y="332">+ doFilter(req,res,chain)</text>
+  </g>
+  <!-- MODEL -->
+  <g>
+   <rect x="4" y="370" width="172" height="170" fill="#fff" stroke="#1F7A5C" stroke-width="1.4"/><text x="12" y="383" font-weight="bold">Usuario</text><line x1="4" y1="388" x2="176" y2="388" stroke="#1F7A5C"/>
+   <text x="12" y="400">- id: int</text><text x="12" y="411">- nome, cpf, email: String</text><text x="12" y="422">- saldoPontos: int</text><text x="12" y="433">- dataCadastro: LocalDate</text><line x1="4" y1="439" x2="176" y2="439" stroke="#1F7A5C"/>
+   <text x="12" y="451">+ converterPontosEmCredito(int)</text><text x="12" y="462">+ podeResgatar(int): boolean</text><text x="12" y="473">+ adicionarPontos(int)</text><text x="12" y="484">+ getters / setters</text>
+   <rect x="196" y="370" width="172" height="110" fill="#fff" stroke="#1F7A5C" stroke-width="1.4"/><text x="204" y="383" font-weight="bold">OperadoraTransporte</text><line x1="196" y1="388" x2="368" y2="388" stroke="#1F7A5C"/>
+   <text x="204" y="400">- id: int</text><text x="204" y="411">- nome, cidade: String</text><text x="204" y="422">- sistemaBilhetagem: String</text><line x1="196" y1="428" x2="368" y2="428" stroke="#1F7A5C"/><text x="204" y="440">+ getters / setters</text>
+   <rect x="388" y="370" width="172" height="170" fill="#fff" stroke="#1F7A5C" stroke-width="1.4"/><text x="396" y="383" font-weight="bold">Voucher</text><line x1="388" y1="388" x2="560" y2="388" stroke="#1F7A5C"/>
+   <text x="396" y="400">- codigo: String</text><text x="396" y="411">- usuario: Usuario</text><text x="396" y="422">- operadora: OperadoraTransporte</text><text x="396" y="433">- valorCredito: double</text><text x="396" y="444">- dataValidade: LocalDate</text><text x="396" y="455">- status: StatusVoucher</text><line x1="388" y1="461" x2="560" y2="461" stroke="#1F7A5C"/>
+   <text x="396" y="473">+ emitir(u, o, pontos): Voucher</text><text x="396" y="484">+ estaValido(): boolean</text><text x="396" y="495">+ validarNaCatraca(m, km): Viagem</text><text x="396" y="506">+ calcularCO2Economizado(m, km)</text>
+   <rect x="580" y="370" width="136" height="104" fill="#fff" stroke="#1F7A5C" stroke-width="1.4"/><text x="588" y="383" font-weight="bold">Viagem</text><line x1="580" y1="388" x2="716" y2="388" stroke="#1F7A5C"/>
+   <text x="588" y="400">- voucher: Voucher</text><text x="588" y="411">- modal: ModalTransporte</text><text x="588" y="422">- distanciaKm: double</text><text x="588" y="433">- co2EconomizadoKg</text><text x="588" y="444">- dataUso: LocalDateTime</text>
+   <rect x="580" y="484" width="136" height="30" fill="#EBF1EC" stroke="#1F7A5C"/><text x="588" y="496" font-weight="bold">«enum» ModalTransporte</text><text x="588" y="508">ONIBUS METRO TREM BRT</text>
+   <rect x="196" y="492" width="172" height="30" fill="#EBF1EC" stroke="#1F7A5C"/><text x="204" y="504" font-weight="bold">«enum» StatusVoucher</text><text x="204" y="516">ATIVO UTILIZADO EXPIRADO</text>
+  </g>
+  <!-- setas -->
+  <g stroke="#5B6B62" stroke-width="1" fill="none" marker-end="url(#arr)">
+   <path d="M89 104 V127"/><path d="M267 104 V127"/><path d="M445 104 V127"/><path d="M627 104 V127"/>
+   <path d="M71 214 V237"/><path d="M213 214 V237"/><path d="M362 214 V237"/><path d="M514 214 V237"/>
+  </g>
+  <g stroke="#1F7A5C" stroke-width="1.2" fill="none">
+   <path d="M388 532 H176" marker-start="url(#dia)"/>
+   <path d="M388 422 H368" marker-start="url(#dia)"/>
+   <path d="M580 400 H560" marker-start="url(#dia)"/>
+  </g>
+  <text x="180" y="529" font-size="8" fill="#0F3D2C">1</text><text x="368" y="529" font-size="8" fill="#0F3D2C">*</text><text x="372" y="418" font-size="8" fill="#0F3D2C">*</text><text x="564" y="396" font-size="8" fill="#0F3D2C">1</text>
+  <text x="4" y="556" font-size="8" fill="#5B6B62">Setas cinza: dependência (injeção pelo construtor). Losango: associação. Apoio: DTOs, exceções, GlobalExceptionHandler, DatabaseInitializer.</text>
+ </svg>
+</section>
+
+<!-- 07 -->
+<section class="sec">
+ <div class="kicker">07 · Procedimentos para rodar a aplicação</div><h2>Do zero até a API no ar</h2>
+ <div class="two">
+  <div>
+   <h3>Ferramentas e versões</h3>
+   <table>
+    <tr><th>Item</th><th>Versão</th></tr>
+    <tr><td>Java JDK</td><td>17 ou superior</td></tr>
+    <tr><td>Spring Boot</td><td>3.5.6</td></tr>
+    <tr><td>Maven</td><td>3.9+</td></tr>
+    <tr><td>MySQL</td><td>8.x</td></tr>
+    <tr><td>IDE</td><td>IntelliJ IDEA, Eclipse ou VS Code (Extension Pack for Java)</td></tr>
+    <tr><td>Testes</td><td>Postman, Insomnia ou <code>requests.http</code></td></tr>
+   </table>
+  </div>
+  <div>
+   <h3>Importar o projeto</h3>
+   <p><b>IntelliJ:</b> File &gt; Open &gt; pasta <code>pointway-api</code> (com o <code>pom.xml</code>).</p>
+   <p><b>Eclipse:</b> File &gt; Import &gt; Maven &gt; Existing Maven Projects.</p>
+   <p><b>VS Code:</b> abrir a pasta com o Extension Pack for Java.</p>
+   <p>O Maven baixa o Spring Boot e o driver do MySQL sozinho.</p>
+  </div>
+ </div>
+ <h3>Executar localmente</h3>
+ <ol class="steps">
+  <li>Iniciar o MySQL e criar o banco: <code>CREATE DATABASE pointway_db;</code> (ou rodar <code>database/pointway_schema.sql</code>).</li>
+  <li>Conferir usuário e senha do banco em <code>dao/ConnectionFactory.java</code> (padrão <code>root</code>/<code>root</code>). Também é possível usar as variáveis de ambiente <code>DB_URL</code>, <code>DB_USER</code> e <code>DB_PASSWORD</code>.</li>
+  <li>Executar a classe <code>PointwayApplication</code> pela IDE, ou no terminal: <code>mvn spring-boot:run</code>.</li>
+  <li>Abrir <code>http://localhost:8080/</code> — deve aparecer <code>"status": "online"</code>. As tabelas e 4 operadoras de exemplo são criadas na primeira execução.</li>
+  <li>Testar os endpoints com o arquivo <code>requests.http</code> ou pelo Postman.</li>
+ </ol>
+</section>
+<section class="sec">
+ <div class="kicker">07 · Procedimentos (continuação)</div>
+ <h3>Deploy na nuvem (Railway)</h3>
+ <ol class="steps">
+  <li>Publicar o projeto no GitHub.</li>
+  <li>No Railway: <b>New Project &gt; Deploy from GitHub repo</b>. O <code>Dockerfile</code> do projeto é detectado e a API é compilada com Maven e executada com Java 17.</li>
+  <li>No mesmo projeto: <b>+ New &gt; Database &gt; MySQL</b>.</li>
+  <li>No serviço da API, aba <b>Variables</b>, criar <code>DB_URL</code>, <code>DB_USER</code> e <code>DB_PASSWORD</code> apontando para o MySQL do Railway (valores no README).</li>
+  <li><b>Settings &gt; Networking &gt; Generate Domain</b>: o link gerado é a URL da API usada pelo front-end na Vercel.</li>
+ </ol>
+ <pre>DB_URL=jdbc:mysql://${{MySQL.MYSQLHOST}}:${{MySQL.MYSQLPORT}}/${{MySQL.MYSQLDATABASE}}?useSSL=false&amp;allowPublicKeyRetrieval=true
+DB_USER=${{MySQL.MYSQLUSER}}
+DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}</pre>
+ <h3>Integração com o front-end</h3>
+ <p>O <code>CorsFilter</code> libera chamadas vindas de outro domínio (a Vercel) e responde às requisições <i>preflight</i> (<code>OPTIONS</code>). No React, a URL da API fica na variável <code>VITE_API_URL</code>:</p>
+ <pre>const resp = await fetch(`${import.meta.env.VITE_API_URL}/vouchers`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ usuarioId: 1, operadoraId: 1, pontos: 800 }),
+});
+if (!resp.ok) alert((await resp.json()).mensagem);</pre>
+ <h3>Boas práticas aplicadas</h3>
+ <ul style="margin:0;padding-left:18px">
+  <li>Padrões DAO, Connection Factory e MVC (Resource → BO → DAO → Model).</li>
+  <li>Injeção de dependência pelo construtor e nomes em português seguindo a convenção Java.</li>
+  <li><code>PreparedStatement</code> em todo SQL (evita SQL Injection) e <i>try-with-resources</i> para fechar conexões.</li>
+  <li>Exceções próprias (<code>ValidacaoException</code>, <code>RegraNegocioException</code>, <code>ConflitoException</code>, <code>RecursoNaoEncontradoException</code>) convertidas em status HTTP pelo <code>GlobalExceptionHandler</code>.</li>
+  <li>Status REST corretos: 201 com header <code>Location</code> na criação, 204 na remoção.</li>
+ </ul>
+</section>
+</body></html>
