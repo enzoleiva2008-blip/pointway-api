@@ -10,7 +10,7 @@ Enzo Leiva (RM568877), Matheus Segura (RM570878) — turma 1TDSPO.
 
 - Deploy da API: https://pointway-api.onrender.com
 - Repositório: https://github.com/enzoleiva2008-blip/pointway-api
-- Front-end: `https://SEU-LINK-DA-VERCEL` *(preencher)*
+- Front-end: https://pointway-front.vercel.app
 
 ## Tecnologias
 - Java 17 · Spring Boot 3.5 (spring-boot-starter-web)
